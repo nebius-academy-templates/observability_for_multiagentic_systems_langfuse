@@ -30,7 +30,7 @@ You'll create a Langfuse project, configure the credentials, add trace tags to d
 
 ### Repository check
 
-Download [`observability_for_multiagentic_systems`](https://github.com/nebius-academy-templates/observability_for_multiagentic_systems/tree/langfuse) and install its dependencies, which include `langfuse`. Use Python 3.11 or newer:
+Download [`observability_for_multiagentic_systems_langfuse`](https://github.com/nebius-academy-templates/observability_for_multiagentic_systems_langfuse) and install its dependencies, which include `langfuse`. Use Python 3.11 or newer:
 
 ```
 pip install -r requirements.txt
