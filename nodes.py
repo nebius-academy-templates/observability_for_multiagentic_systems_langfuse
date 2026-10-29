@@ -1,12 +1,12 @@
 import json
 
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 
 from state import ReviewState
 
 # ── shared LLM instance ──────────────────────────────────────────────────────
-_llm = ChatOpenAI(model="gpt-4o", temperature=0)
+_llm = ChatAnthropic(model="claude-sonnet-5-5", max_tokens=16000)
 
 # ── prompts ─────────────────────
 _BUG_PROMPT = """You are a bug detection specialist reviewing a PR diff.
@@ -78,7 +78,7 @@ def _call(system: str, user: str) -> str:
     response = _llm.invoke(
         [SystemMessage(content=system), HumanMessage(content=user)]
     )
-    return response.content
+    return response.text
 
 
 def _parse_json_list(raw: str) -> list[dict]:

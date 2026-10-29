@@ -1,11 +1,17 @@
 import json
+import uuid
 from pathlib import Path
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
+from langfuse import get_client  # noqa: E402
+from langfuse.langchain import CallbackHandler  # noqa: E402
+
 from graph import compiled_graph  # noqa: E402
+
+langfuse_handler = CallbackHandler()
 
 BUGGY = (Path(__file__).parent / "diffs" / "buggy.diff").read_text()
 CLEAN = (Path(__file__).parent / "diffs" / "clean.diff").read_text()
@@ -27,10 +33,13 @@ def run(label: str, diff: str) -> None:
         "retry_count": 0,
     }
 
+    run_id = str(uuid.uuid4())
+    config = {"callbacks": [langfuse_handler]}
+
     final_state: dict = {}
 
     # stream_mode="updates" → one dict per node showing only what changed
-    for step in compiled_graph.stream(initial_state, stream_mode="updates"):
+    for step in compiled_graph.stream(initial_state, config=config, stream_mode="updates"):
         node_name, updates = next(iter(step.items()))
         keys = list(updates.keys())
         print(f"  ✓ {node_name} wrote: {keys}")
@@ -54,3 +63,4 @@ def run(label: str, diff: str) -> None:
 
 run("buggy diff", BUGGY)
 run("clean diff", CLEAN)
+get_client().flush()

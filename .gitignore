@@ -28,6 +28,6 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# LangGraph / LangSmith
+# LangGraph / Langfuse
 *.db
 *.sqlite
